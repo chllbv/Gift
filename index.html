@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hi, Lia!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Caveat:wght@400;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --pink: #f9c8d4;
+      --pink-dark: #e8a0b4;
+      --pink-deep: #d4607a;
+      --red: #c0392b;
+      --white: #ffffff;
+      --black: #111111;
+      --cream: #fdf6f0;
+      --handwritten: 'Caveat', cursive;
+      --serif: 'Playfair Display', serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--handwritten);
+      background: var(--white);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* ===================== SCREENS ===================== */
+    .screen {
+      display: none;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--white);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.5s ease;
+    }
+    .screen.active { display: flex; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===================== BTN ===================== */
+    .btn {
+      border: 2px solid var(--black);
+      background: transparent;
+      border-radius: 50px;
+      padding: 12px 40px;
+      font-family: var(--handwritten);
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 1px;
+    }
+    .btn:hover {
+      background: var(--black);
+      color: var(--white);
+      transform: scale(1.05);
+    }
+    .btn-row { display: flex; gap: 24px; margin-top: 24px; }
+
+    /* ===================== SCREEN 1: HI LIA ===================== */
+    #s-intro h1 {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 10vw, 7rem);
+      font-weight: 900;
+      color: var(--black);
+      line-height: 1;
+    }
+    #s-intro p {
+      font-family: var(--handwritten);
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      margin-top: 16px;
+      color: #444;
+      animation: fadeIn 1s ease 0.5s both;
+    }
+
+    /* ===================== SCREEN 2: WANNA OPEN ===================== */
+    #s-open {
+      position: relative;
+    }
+    #s-open .question {
+      font-family: var(--handwritten);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      margin-bottom: 28px;
+      color: var(--black);
+    }
+
+    /* Windows-style popup */
+    .win-popup {
+      display: none;
+      position: fixed;
+      background: white;
+      border: 2px solid #888;
+      box-shadow: 4px 4px 0 #888;
+      width: 240px;
+      z-index: 100;
+      animation: popIn 0.18s ease;
+    }
+    .win-popup.show { display: block; }
+    @keyframes popIn {
+      from { transform: scale(0.85); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+    .win-titlebar {
+      background: var(--black);
+      color: white;
+      padding: 5px 8px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+    .win-close {
+      cursor: pointer;
+      font-size: 0.9rem;
+      border: 2px solid white;
+      background: transparent;
+      color: white;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .win-close:hover { background: #c0392b; border-color: #c0392b; }
+    .win-body {
+      padding: 10px;
+      text-align: center;
+    }
+    .win-body img {
+      width: 100px;
+      height: 110px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 6px;
+    }
+    .win-body p {
+      font-family: var(--handwritten);
+      font-size: 1.1rem;
+    }
+
+    /* YES button disabled state */
+    .btn-yes-disabled {
+      opacity: 0.35;
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+
+    /* ===================== SCREEN 3: CODE ===================== */
+    #s-code .snoopy-img {
+      width: 120px;
+      margin-bottom: 16px;
+    }
+    #s-code h2 {
+      font-family: var(--handwritten);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      margin-bottom: 6px;
+      text-align: center;
+    }
+    #s-code .clue {
+      font-size: 1rem;
+      color: #777;
+      margin-bottom: 20px;
+      font-family: var(--handwritten);
+    }
+    #s-code input {
+      border: 3px solid var(--black);
+      border-radius: 0;
+      padding: 14px 24px;
+      font-family: var(--handwritten);
+      font-size: 1.2rem;
+      width: 340px;
+      max-width: 90vw;
+      text-align: center;
+      outline: none;
+    }
+    #code-error {
+      color: var(--red);
+      font-size: 1rem;
+      margin-top: 10px;
+      font-family: var(--handwritten);
+      min-height: 24px;
+    }
+
+    /* ===================== SCREEN 4: GIFT BOXES ===================== */
+    #s-gifts {
+      background: var(--white);
+    }
+    #s-gifts h2 {
+      font-family: var(--handwritten);
+      font-size: clamp(1.4rem, 3vw, 1.8rem);
+      margin-bottom: 32px;
+      color: var(--black);
+    }
+    .gift-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      position: relative;
+    }
+    .gift-box {
+      cursor: pointer;
+      transition: transform 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gift-box:hover { transform: scale(1.08) rotate(-2deg); }
+    .gift-box img {
+      width: 160px;
+      height: 160px;
+      object-fit: contain;
+    }
+    .gift-snoopy {
+      position: absolute;
+      right: -80px;
+      bottom: -20px;
+      width: 120px;
+      pointer-events: none;
+    }
+
+    /* ===================== LOVE COUPONS ===================== */
+    #s-coupons {
+      background: var(--white);
+      padding: 20px;
+    }
+    .back-btn {
+      position: absolute;
+      top: 24px;
+      left: 28px;
+      font-size: 1.8rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: var(--black);
+    }
+    #s-coupons h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      font-weight: 900;
+    }
+    #s-coupons .subtitle {
+      font-family: var(--handwritten);
+      font-size: 1.2rem;
+      margin-bottom: 24px;
+      color: #555;
+    }
+    .coupons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      max-width: 560px;
+    }
+    .coupon {
+      background: var(--pink);
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1.5px dashed var(--pink-dark);
+    }
+    .coupon-text {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .coupon-expires {
+      font-family: var(--handwritten);
+      font-size: 0.7rem;
+      color: #999;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      border-left: 1.5px dashed var(--pink-dark);
+      padding-left: 8px;
+      margin-left: 10px;
+    }
+    .coupon-snoopy-l, .coupon-snoopy-r {
+      width: 90px;
+      object-fit: contain;
+    }
+    .coupon-sides {
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
+    }
+
+    /* ===================== LETTER ===================== */
+    #s-letter {
+      background: var(--white);
+    }
+    #s-letter h1 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    #s-letter .subtitle {
+      font-family: var(--handwritten);
+      font-size: 1.2rem;
+      color: #555;
+      margin-bottom: 24px;
+    }
+    #s-letter .envelope-wrap {
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    #s-letter .envelope-wrap:hover { transform: scale(1.05); }
+    #s-letter .envelope-wrap img {
+      width: 260px;
+    }
+
+    /* Letter content screen */
+    #s-letter-text {
+      background: var(--cream);
+    }
+    .letter-paper {
+      background: white;
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      max-width: 520px;
+      width: 90vw;
+      padding: 48px 48px;
+      border-radius: 4px;
+      text-align: left;
+    }
+    .letter-paper p {
+      font-family: var(--handwritten);
+      font-size: 1.3rem;
+      line-height: 1.8;
+      color: #333;
+    }
+
+    /* ===================== GAME (QUIZ) ===================== */
+    #s-game {
+      background: var(--white);
+    }
+    #s-game h1 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    #s-game .subtitle {
+      font-family: var(--handwritten);
+      font-size: 1.2rem;
+      color: #555;
+      margin-bottom: 24px;
+    }
+    #s-game .arcade-img {
+      width: 180px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    #s-game .arcade-img:hover { transform: scale(1.05) rotate(-3deg); }
+
+    /* Quiz screen */
+    #s-quiz {
+      background: var(--white);
+      padding: 20px;
+    }
+    .quiz-header {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 7vw, 4.5rem);
+      font-weight: 900;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .quiz-question {
+      font-family: var(--handwritten);
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      margin-bottom: 24px;
+      text-align: center;
+      color: #333;
+    }
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 420px;
+      max-width: 90vw;
+    }
+    .quiz-opt {
+      border: 2px solid var(--black);
+      background: transparent;
+      border-radius: 50px;
+      padding: 12px 32px;
+      font-family: var(--handwritten);
+      font-size: 1.15rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .quiz-opt:hover {
+      background: var(--black);
+      color: white;
+    }
+    .quiz-opt-selected {
+      background: var(--pink) !important;
+      border-color: var(--pink-deep) !important;
+      color: var(--black) !important;
+    }
+    .quiz-opt-selected:hover {
+      background: var(--pink-dark) !important;
+    }
+    .quiz-nav {
+      display: flex;
+      justify-content: space-between;
+      width: 420px;
+      max-width: 90vw;
+      margin-top: 20px;
+    }
+    .quiz-nav a {
+      font-family: var(--handwritten);
+      font-size: 1.1rem;
+      text-decoration: underline;
+      cursor: pointer;
+      color: var(--black);
+    }
+    .quiz-snoopy {
+      position: absolute;
+      left: 40px;
+      bottom: 40px;
+      width: 80px;
+    }
+
+    /* ===================== ONE LAST QUESTION ===================== */
+    #s-last {
+      background: var(--white);
+    }
+    #s-last h1 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 6vw, 4.5rem);
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    #s-last .subtitle {
+      font-family: var(--handwritten);
+      font-size: 1.2rem;
+      color: #555;
+      margin-bottom: 24px;
+    }
+
+    /* Shy screen */
+    #s-shy {
+      background: var(--white);
+    }
+    #s-shy .shy-text {
+      font-family: var(--handwritten);
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+    #s-shy img {
+      width: 180px;
+      margin-bottom: 24px;
+    }
+
+    /* Flowers screen */
+    #s-flowers {
+      background: var(--white);
+    }
+    #s-flowers .flowers-text {
+      font-family: var(--handwritten);
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+    }
+    #s-flowers img {
+      width: 200px;
+      margin-bottom: 24px;
+    }
+
+    /* The big question */
+    #s-propose {
+      background: var(--white);
+    }
+    .propose-snoopy {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      width: 160px;
+    }
+    #s-propose .propose-q {
+      font-family: var(--handwritten);
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      margin-bottom: 28px;
+      text-align: center;
+      color: var(--black);
+    }
+
+    /* Yehey screens */
+    #s-yehey {
+      background: var(--white);
+    }
+    #s-yehey .yehey-text {
+      font-family: var(--handwritten);
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      margin-bottom: 20px;
+      color: var(--black);
+    }
+    #s-yehey img {
+      width: 200px;
+    }
+    #s-iloveyou {
+      background: var(--white);
+    }
+    #s-iloveyou .love-text {
+      font-family: var(--handwritten);
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      margin-bottom: 20px;
+      color: var(--black);
+    }
+    #s-iloveyou img {
+      width: 220px;
+    }
+
+    /* No popups for propose */
+    #propose-popups {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 200;
+    }
+    #propose-popups .win-popup {
+      pointer-events: all;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ==================== SCREEN 1: HI LIA ==================== -->
+<div class="screen active" id="s-intro">
+  <h1>Hi, Lia!</h1>
+  <p>I made this for you. I hope you like it!</p>
+</div>
+
+<!-- ==================== SCREEN 2: WANNA OPEN ==================== -->
+<div class="screen" id="s-open">
+  <p class="question">Wanna open it?</p>
+  <div class="btn-row">
+    <button class="btn" id="open-yes-btn" onclick="goTo('s-code')">YES</button>
+    <button class="btn" id="open-no-btn" onclick="handleOpenNo()">NO</button>
+  </div>
+</div>
+
+<!-- ==================== SCREEN 3: CODE ==================== -->
+<div class="screen" id="s-code">
+  <img class="snoopy-img" src="snoopy-excited.png" alt="Snoopy excited"/>
+  <h2>Now, you have to enter the code:</h2>
+  <p class="clue">(Clue: Date of our first conversation)</p>
+  <input type="text" id="code-input" placeholder="Type here..." />
+  <p id="code-error"></p>
+  <div style="margin-top:16px;">
+    <button class="btn" onclick="checkCode()">ENTER</button>
+  </div>
+</div>
+
+<!-- ==================== SCREEN 4: GIFT BOXES ==================== -->
+<div class="screen" id="s-gifts">
+  <h2>Click something to open!</h2>
+  <div class="gift-grid" style="position:relative;">
+    <div class="gift-box" onclick="goTo('s-coupons')">
+      <img src="gift-box-woodstock.png" alt="Gift box 1 (Woodstock on top)"/>
+    </div>
+    <div class="gift-box" onclick="goTo('s-letter')">
+      <img src="gift-box-2.png" alt="Gift box 2"/>
+    </div>
+    <div class="gift-box" onclick="goTo('s-game')">
+      <img src="gift-box-3.png" alt="Gift box 3"/>
+    </div>
+    <div class="gift-box" onclick="goTo('s-last')">
+      <img src="gift-box-4.png" alt="Gift box 4"/>
+    </div>
+    <img class="gift-snoopy" src="snoopy-cool.png" alt="Snoopy cool"/>
+  </div>
+</div>
+
+<!-- ==================== SCREEN 5: LOVE COUPONS ==================== -->
+<div class="screen" id="s-coupons">
+  <button class="back-btn" onclick="goTo('s-gifts')">↩</button>
+  <div style="display:flex;align-items:center;gap:32px;flex-wrap:wrap;justify-content:center;">
+    <img src="snoopy-house.png" alt="Snoopy house" style="width:100px;"/>
+    <div style="text-align:center;">
+      <h1>Love Coupons</h1>
+      <p class="subtitle">You have Love Coupons from me!</p>
+      <div class="coupons-grid">
+        <div class="coupon"><div class="coupon-text">Unlimited<br>Kisses</div><div class="coupon-expires">NEVER EXPIRES ♡</div></div>
+        <div class="coupon"><div class="coupon-text">Unlimited<br>Sleepcall</div><div class="coupon-expires">NEVER EXPIRES ♡</div></div>
+        <div class="coupon"><div class="coupon-text">Unlimited<br>Hugs</div><div class="coupon-expires">NEVER EXPIRES ♡</div></div>
+        <div class="coupon"><div class="coupon-text">Unlimited<br>Dates</div><div class="coupon-expires">NEVER EXPIRES ♡</div></div>
+        <div class="coupon"><div class="coupon-text">Unlimited<br>Cuddle</div><div class="coupon-expires">NEVER EXPIRES ♡</div></div>
+        <div class="coupon"><div class="coupon-text">Unlimited<br>Love</div><div class="coupon-expires">NEVER EXPIRES ♡</div></div>
+      </div>
+    </div>
+    <img src="snoopy-heart.png" alt="Snoopy with heart" style="width:100px;"/>
+  </div>
+</div>
+
+<!-- ==================== SCREEN 6: LETTER ==================== -->
+<div class="screen" id="s-letter">
+  <button class="back-btn" onclick="goTo('s-gifts')">↩</button>
+  <h1>A Letter For You, My Love</h1>
+  <p class="subtitle">Click to read the letter!</p>
+  <div class="envelope-wrap" onclick="goTo('s-letter-text')">
+    <img src="envelope.png" alt="Envelope with letter"/>
+  </div>
+</div>
+
+<div class="screen" id="s-letter-text">
+  <button class="back-btn" onclick="goTo('s-letter')">↩</button>
+  <div class="letter-paper">
+    <p>Hi, baby! I actually don't know what to write rn.</p>
+  </div>
+</div>
+
+<!-- ==================== SCREEN 7: GAME ==================== -->
+<div class="screen" id="s-game">
+  <button class="back-btn" onclick="goTo('s-gifts')">↩</button>
+  <h1>Simple Game</h1>
+  <p class="subtitle">Click the icon to play the game!</p>
+  <img class="arcade-img" src="arcade.png" alt="Arcade machine" onclick="startQuiz()"/>
+</div>
+
+<!-- Quiz -->
+<div class="screen" id="s-quiz">
+  <button class="back-btn" onclick="goTo('s-game')">↩</button>
+  <p class="quiz-header" id="q-label">Question 1:</p>
+  <p class="quiz-question" id="q-text"></p>
+  <div class="quiz-options" id="q-options"></div>
+  <div class="quiz-nav">
+    <a onclick="quizNav(-1)">Back</a>
+    <a onclick="quizNav(1)">Next</a>
+  </div>
+  <img class="quiz-snoopy" src="snoopy-heart-hug.png" alt="Snoopy"/>
+</div>
+
+<!-- ==================== SCREEN 8: ONE LAST QUESTION ==================== -->
+<div class="screen" id="s-last">
+  <button class="back-btn" onclick="goTo('s-gifts')">↩</button>
+  <h1>One Last Question</h1>
+  <p class="subtitle">Click enter to proceed!</p>
+  <button class="btn" onclick="goTo('s-shy')">ENTER</button>
+</div>
+
+<div class="screen" id="s-shy">
+  <p class="shy-text">I'm shy!</p>
+  <img src="snoopy-shy.png" alt="Snoopy shy"/>
+  <button class="btn" onclick="goTo('s-flowers')">Still proceed</button>
+</div>
+
+<div class="screen" id="s-flowers">
+  <p class="flowers-text">Flowers for you first.</p>
+  <img src="snoopy-flowers.png" alt="Snoopy holding flowers"/>
+  <button class="btn" onclick="goTo('s-propose')">Proceed</button>
+</div>
+
+<div class="screen" id="s-propose">
+  <img class="propose-snoopy" src="snoopy-peek.png" alt="Snoopy peeking"/>
+  <p class="propose-q">Will you be my girlfrieeend?</p>
+  <div class="btn-row">
+    <button class="btn" id="propose-yes-btn" onclick="goTo('s-yehey')">YES</button>
+    <button class="btn" id="propose-no-btn" onclick="handleProposeNo()">NO</button>
+  </div>
+</div>
+
+<!-- Propose no popups container -->
+<div id="propose-popups"></div>
+
+<div class="screen" id="s-yehey">
+  <p class="yehey-text">Yehey! I love youuuuuu!</p>
+  <img src="snoopy-dance.png" alt="Snoopy dancing"/>
+</div>
+
+<div class="screen" id="s-iloveyou">
+  <p class="love-text">I love you so much!</p>
+  <img src="snoopy-love.png" alt="Snoopy sending hearts"/>
+</div>
+
+<script>
+  // ============ NAVIGATION ============
+  function goTo(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    // Reset open popups when re-entering
+    if (id === 's-open') {
+      openPopups.forEach(p => p.remove());
+      openPopups = [];
+      document.getElementById('open-yes-btn').classList.remove('btn-yes-disabled');
+    }
+    // Reset propose popups when re-entering
+    if (id === 's-propose') {
+      proposePopups.forEach(p => p.remove());
+      proposePopups = [];
+      document.getElementById('propose-yes-btn').classList.remove('btn-yes-disabled');
+    }
+  }
+
+  // Auto-advance intro
+  setTimeout(() => goTo('s-open'), 2200);
+
+  // ============ OPEN NO POPUPS ============
+  const openMsgs = [
+    { img: 'snoopy-thinking.png', alt: 'Snoopy thinking',  text: 'Why noooot?' },
+    { img: 'snoopy-walk.png',     alt: 'Snoopy walking',   text: "You dont like it?" },
+    { img: 'snoopy-sad.png',      alt: 'Snoopy sad',       text: 'Okay..' },
+  ];
+  let openPopups = [];
+
+  function handleOpenNo() {
+    const msgIndex = openPopups.length % openMsgs.length;
+    const msg = openMsgs[msgIndex];
+    const base = { top: 25 + openPopups.length * 5, left: 10 + openPopups.length * 8 };
+
+    const el = document.createElement('div');
+    el.className = 'win-popup show';
+    el.style.cssText = `top:${base.top}%;left:${base.left}%;z-index:${100 + openPopups.length};`;
+    el.innerHTML = `
+      <div class="win-titlebar">
+        <button class="win-close" onclick="closeOpenPopupEl(this)">✕</button>
+      </div>
+      <div class="win-body">
+        <img src="${msg.img}" alt="${msg.alt}"/>
+        <p>${msg.text}</p>
+      </div>`;
+    document.getElementById('s-open').appendChild(el);
+    openPopups.push(el);
+    updateOpenYes();
+  }
+
+  function closeOpenPopupEl(btn) {
+    const el = btn.closest('.win-popup');
+    el.remove();
+    openPopups = openPopups.filter(p => p !== el);
+    updateOpenYes();
+  }
+
+  function updateOpenYes() {
+    const yesBtn = document.getElementById('open-yes-btn');
+    if (openPopups.length > 0) {
+      yesBtn.classList.add('btn-yes-disabled');
+    } else {
+      yesBtn.classList.remove('btn-yes-disabled');
+    }
+  }
+
+  // ============ CODE CHECK ============
+  const CORRECT_CODE = 'january 10, 2025';
+  function checkCode() {
+    const val = document.getElementById('code-input').value.trim().toLowerCase();
+    const err = document.getElementById('code-error');
+    if (val === CORRECT_CODE || val === 'january 10 2025' || val === '01/10/2025' || val === '1/10/2025' || val === 'jan 10, 2025' || val === 'jan 10 2025') {
+      err.textContent = '';
+      goTo('s-gifts');
+    } else {
+      err.textContent = '❌ Wrong code! Try again.';
+      document.getElementById('code-input').style.borderColor = 'red';
+      setTimeout(() => document.getElementById('code-input').style.borderColor = 'var(--black)', 1500);
+    }
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    const ci = document.getElementById('code-input');
+    if (ci) ci.addEventListener('keydown', e => { if (e.key === 'Enter') checkCode(); });
+  });
+
+  // ============ QUIZ (UPDATED QUESTIONS & REACTIONS) ============
+  const quizData = [
+    { q: 'Do you think I love you?', opts: ['Yes', 'Always', 'All of the above'] },
+    { 
+      q: 'How about me, do you love me?', 
+      opts: ['Yes', 'No', 'Always'],
+      reaction: { trigger: 'No', msg: "You dont love me? Im sad na. 😢" } 
+    },
+    { 
+      q: 'What kind of dates do you want?', 
+      opts: ['Picnic date', 'Romantic date', 'Adventure', 'Cafe hopping', 'Indoor dates', 'Movie date', 'Road trip'] 
+    },
+    { 
+      q: 'What do you love most about me?', 
+      opts: ['How I treat you', 'My personality', 'All about me', 'None'],
+      reaction: { trigger: 'None', msg: "Thats sad. 😔" } 
+    },
+    { q: "What's something you want us to do in the future?", opts: ['Travel together', 'Try new food places', 'Build something together (goals/dreams)', 'All of the above'] },
+    { q: 'If we argue, what do you want from me?', opts: ['Lambing agad', 'Space muna', 'Calm talk', 'Reassurance'] },
+    { q: 'Rate me as your baby:', opts: ['10/10', '11/10', 'Perfect — walang reklamo'] },
+    { q: "What's something I do that you wish I did more often?", opts: ['More time together', 'More updates', 'More effort in small things', 'More affection'] },
+    { q: "What's something I should improve as a boyfriend?", opts: ['Communication', 'Patience', 'Consistency', 'Effort'] },
+    { q: 'When do you feel most appreciated by me?', opts: ['When I compliment you', 'When I listen to you', 'When I spend time with you', 'When I support you'] },
+    { q: 'What makes you feel insecure sometimes?', opts: ['Lack of time', 'Lack of reassurance', 'Overthinking', 'Something else'] },
+    { q: "How do you want me to comfort you when you're sad?", opts: ['Lambing agad', 'Quiet support', 'Advice/talking it out', 'Distraction (kulitan, jokes)'] },
+    { q: "What's something you're afraid to tell me sometimes?", opts: ['Your worries', 'Your needs', 'Your feelings', "Nothing, I'm open"] },
+    { q: 'How can I be a better partner for you?', opts: ['Be more understanding', 'Be more expressive', 'Be more present', 'Be more patient'] },
+    { q: 'What do you need more from me lately?', opts: ['Time', 'Attention', 'Effort', 'Reassurance'] },
+    { q: "What's one thing you wish we did more together?", opts: ['Go on dates', 'Talk deeply', 'Try new things', 'Just spend time'] },
+    { q: 'What makes you feel most secure in our relationship?', opts: ['Consistency', 'Honesty', 'Reassurance', 'Effort'] },
+    { q: 'How do you prefer we fix problems?', opts: ['Talk right away', 'Give space then talk', 'One step at a time', 'Depends on the situation'] },
+    { q: "What's something small that means a lot to you?", opts: ['Good morning/night messages', 'Updates', 'Remembering little details', 'Random sweetness'] }
+  ];
+
+  let currentQ = 0;
+  let quizAnswers = quizData.map(() => new Set());
+
+  // Quiz reaction popup
+  let reactionTimeout = null;
+  function showQuizReaction(msg) {
+    clearTimeout(reactionTimeout);
+    let popup = document.getElementById('quiz-reaction-popup');
+    if (!popup) {
+      popup = document.createElement('div');
+      popup.id = 'quiz-reaction-popup';
+      popup.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.8);
+        background: white;
+        border: 2px solid #888;
+        box-shadow: 5px 5px 0 #888;
+        width: 260px;
+        z-index: 500;
+        opacity: 0;
+        transition: opacity 0.2s, transform 0.2s;
+        pointer-events: none;
+      `;
+      popup.innerHTML = `
+        <div style="background:#111;padding:5px 8px;display:flex;justify-content:flex-end;">
+          <div style="width:18px;height:18px;border:2px solid white;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:white;">✕</div>
+        </div>
+        <div style="padding:18px;text-align:center;">
+          <img src="snoopy-sad.png" alt="Snoopy sad" style="width:90px;height:90px;object-fit:contain;display:block;margin:0 auto 10px;"/>
+          <p id="quiz-reaction-text" style="font-family:'Caveat',cursive;font-size:1.15rem;"></p>
+        </div>
+      `;
+      document.body.appendChild(popup);
+    }
+    document.getElementById('quiz-reaction-text').textContent = msg;
+    popup.style.opacity = '1';
+    popup.style.transform = 'translate(-50%, -50%) scale(1)';
+    reactionTimeout = setTimeout(() => {
+      popup.style.opacity = '0';
+      popup.style.transform = 'translate(-50%, -50%) scale(0.8)';
+    }, 2800);
+  }
+
+  function startQuiz() {
+    currentQ = 0;
+    quizAnswers = quizData.map(() => new Set());
+    renderQuiz();
+    goTo('s-quiz');
+  }
+
+  function renderQuiz() {
+    const data = quizData[currentQ];
+    const saved = quizAnswers[currentQ];
+
+    document.getElementById('q-label').textContent = `Question ${currentQ + 1}:`;
+    document.getElementById('q-text').textContent = data.q;
+
+    const opts = document.getElementById('q-options');
+    opts.innerHTML = '';
+    data.opts.forEach(o => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-opt';
+      btn.textContent = o;
+
+      if (saved.has(o)) btn.classList.add('quiz-opt-selected');
+
+      btn.onclick = () => {
+        if (saved.has(o)) {
+          saved.delete(o);
+          btn.classList.remove('quiz-opt-selected');
+        } else {
+          saved.add(o);
+          btn.classList.add('quiz-opt-selected');
+          // Check for reaction trigger (case‑insensitive)
+          if (data.reaction && data.reaction.trigger.toLowerCase() === o.toLowerCase()) {
+            showQuizReaction(data.reaction.msg);
+          }
+        }
+      };
+      opts.appendChild(btn);
+    });
+  }
+
+  function quizNav(dir) {
+    const next = currentQ + dir;
+    if (next < 0) return;
+    if (next >= quizData.length) {
+      goTo('s-gifts');
+      return;
+    }
+    currentQ = next;
+    renderQuiz();
+  }
+
+  // ============ PROPOSE NO POPUPS ============
+  const proposeMsgs = [
+    { img: 'snoopy-cry.png',  alt: 'Snoopy crying',  text: 'Why nooo?' },
+    { img: 'snoopy-walk.png', alt: 'Snoopy walking', text: "You dont like me?" },
+    { img: 'snoopy-sad.png',  alt: 'Snoopy sad',     text: 'Okay..' },
+  ];
+  let proposePopups = [];
+
+  function handleProposeNo() {
+    const msgIndex = proposePopups.length % proposeMsgs.length;
+    const msg = proposeMsgs[msgIndex];
+    const base = { top: 20 + proposePopups.length * 5, left: 8 + proposePopups.length * 8 };
+
+    const el = document.createElement('div');
+    el.className = 'win-popup show';
+    el.style.cssText = `top:${base.top}%;left:${base.left}%;z-index:${200 + proposePopups.length};`;
+    el.innerHTML = `
+      <div class="win-titlebar">
+        <button class="win-close" onclick="closeProposePopupEl(this)">✕</button>
+      </div>
+      <div class="win-body">
+        <img src="${msg.img}" alt="${msg.alt}"/>
+        <p>${msg.text}</p>
+      </div>`;
+    document.getElementById('propose-popups').appendChild(el);
+    proposePopups.push(el);
+    updateProposeYes();
+  }
+
+  function closeProposePopupEl(btn) {
+    const el = btn.closest('.win-popup');
+    el.remove();
+    proposePopups = proposePopups.filter(p => p !== el);
+    updateProposeYes();
+  }
+
+  function updateProposeYes() {
+    const yesBtn = document.getElementById('propose-yes-btn');
+    if (proposePopups.length > 0) {
+      yesBtn.classList.add('btn-yes-disabled');
+    } else {
+      yesBtn.classList.remove('btn-yes-disabled');
+    }
+  }
+
+  // ============ YEHEY -> I LOVE YOU ============
+  document.getElementById('s-yehey').addEventListener('click', () => {
+    setTimeout(() => goTo('s-iloveyou'), 400);
+  });
+</script>
+</body>
+</html>
