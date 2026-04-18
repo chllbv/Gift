@@ -204,11 +204,13 @@
       color: var(--black);
     }
     .gift-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 28px;
-      position: relative;
-    }
+    display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  position: relative;
+  max-width: 90vw;
+  margin: 0 auto;
+  }
     .gift-box {
       cursor: pointer;
       transition: transform 0.2s;
@@ -218,10 +220,10 @@
     }
     .gift-box:hover { transform: scale(1.08) rotate(-2deg); }
     .gift-box img {
-      width: 160px;
-      height: 160px;
-      object-fit: contain;
-    }
+  width: clamp(100px, 35vw, 160px);
+  height: clamp(100px, 35vw, 160px);
+  object-fit: contain;
+}
     .gift-snoopy {
       position: absolute;
       right: -45px;
@@ -368,9 +370,10 @@
 
     /* Quiz screen */
     #s-quiz {
-      background: var(--white);
-      padding: 20px;
-    }
+  background: var(--white);
+  padding: 20px;
+  overflow-y: auto;
+}
     .quiz-header {
       font-family: var(--serif);
       font-size: clamp(2.5rem, 7vw, 4.5rem);
@@ -404,9 +407,9 @@
       text-align: center;
     }
     .quiz-opt:hover {
-      background: var(--black);
-      color: white;
-    }
+  background: var(--pink);
+  color: var(--black);
+}
     .quiz-opt-selected {
       background: var(--pink) !important;
       border-color: var(--pink-deep) !important;
@@ -430,11 +433,11 @@
       color: var(--black);
     }
     .quiz-snoopy {
-      position: absolute;
-      left: 40px;
-      bottom: 40px;
-      width: 80px;
-    }
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  width: clamp(50px, 10vw, 80px);
+}
 
     /* ===================== ONE LAST QUESTION ===================== */
     #s-last {
