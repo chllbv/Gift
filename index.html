@@ -570,9 +570,9 @@
 <div class="screen" id="s-gifts">
   <h2>Click something to open!</h2>
   <div class="gift-grid" style="position:relative;">
-    <div class="gift-box" onclick="goTo('s-coupons')">
-      <img src="images/gift-box-woodstock.png" alt="Gift box 1 (Woodstock on top)"/>
-    </div>
+   <div class="gift-box" onclick="goTo('s-coupons')">
+  <img src="images/gift-box-woodstock.png" alt="Gift box 1 (Woodstock on top)" style="width:200px; height:200px;"/>
+</div>
     <div class="gift-box" onclick="goTo('s-letter')">
       <img src="images/gift-box-2.jpg" alt="Gift box 2"/>
     </div>
@@ -707,7 +707,7 @@
   }
 
   // Auto-advance intro
-  setTimeout(() => goTo('s-open'), 7000);
+  setTimeout(() => goTo('s-open'), 5500);
 
   // ============ OPEN NO POPUPS ============
   const openMsgs = [
@@ -790,21 +790,21 @@
       opts: ['How I treat you', 'My personality', 'All about me', 'None'],
       reaction: { trigger: 'None', msg: "Thats sad. 😔" } 
     },
-    { q: "What's something you want us to do in the future?", opts: ['Travel together', 'Try new food places', 'Build something together (goals/dreams)', 'All of the above'] },
-    { q: 'If we argue, what do you want from me?', opts: ['Lambing agad', 'Space muna', 'Calm talk', 'Reassurance'] },
-    { q: 'Rate me as your baby:', opts: ['10/10', '11/10', 'Perfect — walang reklamo'] },
-    { q: "What's something I do that you wish I did more often?", opts: ['More time together', 'More updates', 'More effort in small things', 'More affection'] },
-    { q: "What's something I should improve as a boyfriend?", opts: ['Communication', 'Patience', 'Consistency', 'Effort'] },
-    { q: 'When do you feel most appreciated by me?', opts: ['When I compliment you', 'When I listen to you', 'When I spend time with you', 'When I support you'] },
-    { q: 'What makes you feel insecure sometimes?', opts: ['Lack of time', 'Lack of reassurance', 'Overthinking', 'Something else'] },
-    { q: "How do you want me to comfort you when you're sad?", opts: ['Lambing agad', 'Quiet support', 'Advice/talking it out', 'Distraction (kulitan, jokes)'] },
-    { q: "What's something you're afraid to tell me sometimes?", opts: ['Your worries', 'Your needs', 'Your feelings', "Nothing, I'm open"] },
-    { q: 'How can I be a better partner for you?', opts: ['Be more understanding', 'Be more expressive', 'Be more present', 'Be more patient'] },
-    { q: 'What do you need more from me lately?', opts: ['Time', 'Attention', 'Effort', 'Reassurance'] },
-    { q: "What's one thing you wish we did more together?", opts: ['Go on dates', 'Talk deeply', 'Try new things', 'Just spend time'] },
-    { q: 'What makes you feel most secure in our relationship?', opts: ['Consistency', 'Honesty', 'Reassurance', 'Effort'] },
-    { q: 'How do you prefer we fix problems?', opts: ['Talk right away', 'Give space then talk', 'One step at a time', 'Depends on the situation'] },
-    { q: "What's something small that means a lot to you?", opts: ['Good morning/night messages', 'Updates', 'Remembering little details', 'Random sweetness'] }
+   { q: "What's something you want us to do in the future?", opts: ['Travel together', 'Try new food places', 'Build something together (goals/dreams)', 'All of it!', 'Something else...'], followUp: { trigger: 'Something else...', placeholder: 'Type here...' } },
+{ q: 'If we argue, what do you want from me?', opts: ['Lambing agad', 'Space muna', 'Calm talk', 'Reassurance', 'Other'], followUp: { trigger: 'Other', placeholder: 'Type here...' } },
+{ q: 'Rate me as your baby:', opts: ['10/10', '11/10', 'Perfect — walang reklamo'] },
+{ q: "What's something I do that you wish I did more often?", opts: ['More time together', 'More updates', 'More effort in small things', 'More affection', 'Everything!', 'Other...'], followUp: { trigger: 'Other...', placeholder: 'Type here...' } },
+{ q: "What's something I should improve as a girlfriend?", opts: ['Communication', 'Patience', 'Consistency', 'Effort', "None — you're perfect", 'Something else entirely...'], followUp: { trigger: 'Something else entirely...', placeholder: 'Type here...' } },
+{ q: 'When do you feel most appreciated by me?', opts: ['When I compliment you', 'When I listen to you', 'When I spend time with you', 'When I support you', 'All!'] },
+{ q: 'What makes you feel insecure sometimes?', opts: ['Lack of time', 'Lack of reassurance', 'Overthinking', 'Nothing — I feel secure', 'Something else...'], followUp: { trigger: 'Something else...', placeholder: 'Type here...' } },
+{ q: "How do you want me to comfort you when you're sad?", opts: ['Lambing agad', 'Quiet support', 'Advice/talking it out', 'Distraction (kulitan, jokes)', 'All of them!'] },
+{ q: "What's something you're afraid to tell me sometimes?", opts: ['Your worries', 'Your needs', 'Your feelings', "Nothing, I'm open", 'Other...'], followUp: { trigger: 'Other...', placeholder: 'Type here...' } },
+{ q: 'How can I be a better partner for you?', opts: ['Be more understanding', 'Be more expressive', 'Be more present', 'Be more patient', "You're already great!", 'Tell me more...'], followUp: { trigger: 'Tell me more...', placeholder: 'Type here...' } },
+{ q: 'What do you need more from me lately?', opts: ['Time', 'Attention', 'Effort', 'Reassurance', 'Nothing — okay na ako', 'Something else entirely...'], followUp: { trigger: 'Something else entirely...', placeholder: 'Type here...' } },
+{ q: "What's one thing you wish we did more together?", opts: ['Go on dates', 'Talk deeply', 'Try new things', 'Just spend time', 'All of it!', 'Other...'], followUp: { trigger: 'Other...', placeholder: 'Type here...' } },
+{ q: 'What makes you feel most secure in our relationship?', opts: ['Consistency', 'Honesty', 'Reassurance', 'Effort', 'Everything!'] },
+{ q: 'How do you prefer we fix problems?', opts: ['Talk right away', 'Give space then talk', 'One step at a time', 'Depends on the situation'] },
+{ q: "What's something small that means a lot to you?", opts: ['Good morning/night messages', 'Updates', 'Remembering little details', 'Random sweetness', 'All of the above!', 'Other...'], followUp: { trigger: 'Other...', placeholder: 'Type here...' } }
   ];
 
   let currentQ = 0;
