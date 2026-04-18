@@ -213,7 +213,7 @@
       cursor: pointer;
       transition: transform 0.2s;
       display: flex;
-      align-items: center;
+      align-items: flex-end;
       justify-content: center;
     }
     .gift-box:hover { transform: scale(1.08) rotate(-2deg); }
@@ -890,7 +890,37 @@
       };
       opts.appendChild(btn);
     });
+
+    // Follow-up text box
+    const existing = document.getElementById('quiz-followup-wrap');
+    if (existing) existing.remove();
+
+    if (data.followUp) {
+      const wrap = document.createElement('div');
+      wrap.id = 'quiz-followup-wrap';
+      wrap.style.cssText = 'margin-top:14px;width:420px;max-width:90vw;display:none;';
+      wrap.innerHTML = `<input id="quiz-followup-input" type="text" placeholder="${data.followUp.placeholder}" style="width:100%;border:3px solid #111;padding:12px 20px;font-family:'Caveat',cursive;font-size:1.15rem;border-radius:50px;outline:none;text-align:center;"/>`;
+      document.getElementById('q-options').after(wrap);
+
+      document.querySelectorAll('.quiz-opt').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const isSelected = quizAnswers[currentQ].has(data.followUp.trigger);
+          wrap.style.display = isSelected ? 'block' : 'none';
+        });
+      });
+
+      if (quizAnswers[currentQ].followUpText) {
+        document.getElementById('quiz-followup-input').value = quizAnswers[currentQ].followUpText;
+        if (quizAnswers[currentQ].has(data.followUp.trigger)) wrap.style.display = 'block';
+      }
+
+      document.getElementById('quiz-followup-input').addEventListener('input', e => {
+        quizAnswers[currentQ].followUpText = e.target.value;
+      });
+    }
   }
+
+  
 
   function quizNav(dir) {
     const next = currentQ + dir;
