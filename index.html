@@ -762,7 +762,7 @@
   function checkCode() {
     const val = document.getElementById('code-input').value.trim().toLowerCase();
     const err = document.getElementById('code-error');
-    if (val === CORRECT_CODE || val === 'january 10 2025' || val === '01/10/2025' || val === '1/10/2025' || val === 'jan 10, 2025' || val === 'jan 10 2025') {
+    if (val === CORRECT_CODE || val === 'january 10 2025' || val === 'january 10, 2025' || val === '01/10/2025' || val === '1/10/2025' || val === 'jan 10, 2025' || val === 'jan 10 2025') {
       err.textContent = '';
       goTo('s-gifts');
     } else {
